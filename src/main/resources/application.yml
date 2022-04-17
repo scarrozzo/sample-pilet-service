@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 9001
 
 spring:
   application:
@@ -14,6 +14,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     database-platform: org.hibernate.dialect.MySQL8Dialect
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/piralfeed
@@ -32,6 +34,8 @@ spring:
       config: classpath:ehcache.xml
   liquibase:
     change-log: classpath:liquibase/master.xml
+    user: root
+    password: piralfeed
 
 management:
   endpoints:
@@ -58,7 +62,3 @@ application:
     basic:
       username: piralfeed_piletpublish_user
       password: piralfeed_piletpublish_password
-
-logging:
-  pattern:
-    console: "%d{dd-MM-yyyy HH:mm:ss.SSS} [${spring.application.name} %X{traceId} %X{spanId} %X{sid}][%.10thread] %-5level %.35logger{35}.%.25M: %msg -%replace(%xException){'\n','\u2028'}%nopex%n"
