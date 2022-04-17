@@ -1,0 +1,64 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: piralfeed
+    version: "@project.version@"
+  servlet:
+    multipart:
+      enabled: true
+      location: ${java.io.tmpdir}
+      max-file-size: 20MB
+      max-request-size: 20MB
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/piralfeed
+    username: root
+    password: piralfeed
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      max-lifetime: 900000
+      connection-timeout: 10000
+      idle-timeout: 600000
+      minimum-idle: 5
+      maximum-pool-size: 10
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+  liquibase:
+    change-log: classpath:liquibase/master.xml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
+info:
+  tags:
+    environment: ${spring.config.activate.on-profile}
+
+springdoc:
+  api-docs:
+    enabled: true
+
+application:
+  file-url: http://localhost:${server.port}/files/%s/%s/%s/index.js
+  security:
+    basic:
+      username: piralfeed_piletpublish_user
+      password: piralfeed_piletpublish_password
+
+logging:
+  pattern:
+    console: "%d{dd-MM-yyyy HH:mm:ss.SSS} [${spring.application.name} %X{traceId} %X{spanId} %X{sid}][%.10thread] %-5level %.35logger{35}.%.25M: %msg -%replace(%xException){'\n','\u2028'}%nopex%n"
