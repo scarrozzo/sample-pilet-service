@@ -4,6 +4,8 @@ import io.piral.feedservice.domain.dto.PostPiletDto;
 import io.piral.feedservice.domain.factory.PiletFactory;
 import io.piral.feedservice.domain.model.Pilet;
 import io.piral.feedservice.domain.service.PiletService;
+import io.piral.feedservice.exception.ConflictException;
+import io.piral.feedservice.exception.ServiceError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -35,15 +37,19 @@ public class CreatePiletCommand extends BaseTransactionalCommand<Pilet>{
     @Override
     protected Pilet doExecute() {
         Pilet pilet = piletFactory.createPilet(dto, appshell);
+        Pilet existingPilet = null;
 
-        if (forceUpload) {
-            try {
-                Pilet existingPilet = piletService.getPilet(pilet.getAppshell(), pilet.getName(), pilet.getPackageVersion());
-                piletService.deletePilet(existingPilet, true);
-                log.info("Force upload pilet si true. Pilet with id {} deleted.", existingPilet.getId());
-            }catch (EntityNotFoundException ex){
-                log.info("Pilet not exists. Force upload parameter not needed");
-            }
+        try {
+            existingPilet = piletService.getPilet(pilet.getAppshell(), pilet.getName(), pilet.getPackageVersion());
+        } catch (EntityNotFoundException ex){
+            log.debug("Pilet for (appshell={}, name={}, packageVersion={}) not exists.", pilet.getAppshell(), pilet.getName(), pilet.getPackageVersion());
+        }
+
+        if (forceUpload && existingPilet != null) {
+            piletService.deletePilet(existingPilet, true);
+            log.info("Force upload pilet si true. Pilet with id {} deleted.", existingPilet.getId());
+        } else if(existingPilet != null){
+            throw new ConflictException(ServiceError.E0004.getMessage());
         }
 
         pilet = piletService.savePilet(pilet);

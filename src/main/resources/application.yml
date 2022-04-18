@@ -56,8 +56,12 @@ springdoc:
   api-docs:
     enabled: true
 
+logging:
+  level:
+    io.piral.feedservice: DEBUG
+
 application:
-  file-url: http://localhost:${server.port}/files/%s/%s/%s/index.js
+  file-url: http://localhost:${server.port}/api/v1/pilets/files/%s/%s/%s/index.js
   security:
     basic:
       username: piralfeed_piletpublish_user

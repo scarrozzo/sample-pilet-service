@@ -42,6 +42,13 @@ public class PiletRepresentationModelAssembler extends RepresentationModelAssemb
                     .requireRef(entity.getRequireRef())
                     .integrity(entity.getIntegrity())
                     .spec(entity.getType())
+                    /*.createdDate(entity.getCreatedDate())
+                    .createdTime(entity.getCreatedTime())
+                    .lastModifiedDate(entity.getLastModifiedDate())
+                    .lastModifiedTime(entity.getLastModifiedTime())
+                    .creator(entity.getCreator())
+                    .modifier(entity.getModifier())
+                    .uid(entity.getUid())*/
                     .build();
 
             items.add(item);

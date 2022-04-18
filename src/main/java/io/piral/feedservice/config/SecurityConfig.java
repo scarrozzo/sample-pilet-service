@@ -26,7 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         /**
          * Protect pilet publish endpoint
          */
-        //http.requestMatchers().antMatchers(HttpMethod.POST, PILET_PATH);
 
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, API_GETS).permitAll()

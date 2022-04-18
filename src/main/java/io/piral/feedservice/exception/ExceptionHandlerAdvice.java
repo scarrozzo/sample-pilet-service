@@ -4,18 +4,46 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.piral.feedservice.util.JsonUtils;
 import lombok.*;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @ControllerAdvice
 public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
+
+    /**
+     * CONFLICT
+     */
+    @ExceptionHandler({EntityExistsException.class, DataIntegrityViolationException.class, ConflictException.class})
+    public ResponseEntity<?> conflict(Throwable e, HttpServletRequest request, HttpServletResponse response) {
+        Error error = Error.builder()
+                .code(ServiceError.E0004.getCode())
+                .message(e.getMessage() != null ? e.getMessage() : ServiceError.E0004.getMessage())
+                .status(HttpStatus.CONFLICT)
+                .build();
+        return responseEntity(error);
+    }
+
+    /**
+     * BAD_REQUEST
+     */
+    @ExceptionHandler({IllegalStateException.class, IllegalArgumentException.class, SecurityException.class})
+    public ResponseEntity<?> badRequest(Throwable e, HttpServletRequest request, HttpServletResponse response) {
+        Error error = Error.builder()
+                .code(ServiceError.V0000.getCode())
+                .message(e.getMessage() != null ? e.getMessage() : ServiceError.V0000.getMessage())
+                .status(HttpStatus.BAD_REQUEST)
+                .build();
+        return responseEntity(error);
+    }
 
     /**
      * Read pilet package exception

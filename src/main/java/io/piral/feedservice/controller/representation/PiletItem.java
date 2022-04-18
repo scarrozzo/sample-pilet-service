@@ -3,25 +3,22 @@ package io.piral.feedservice.controller.representation;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 @Data
 @Builder
 public class PiletItem {
-    private LocalDate lastModifiedDate;
+    /*LocalDate lastModifiedDate;
 
-    private LocalTime lastModifiedTime;
+    LocalTime lastModifiedTime;
 
-    private LocalDate createdDate;
+    LocalDate createdDate;
 
-    private LocalTime createdTime;
+    LocalTime createdTime;
 
-    private String creator;
+    String creator;
 
-    private String modifier;
+    String modifier;
 
-    private String uid;
+    String uid;*/
 
     String name;
 
