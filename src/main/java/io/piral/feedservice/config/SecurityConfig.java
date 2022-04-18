@@ -19,16 +19,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private String password;
 
     private static final String MANAGEMENT_ROLE = "MANAGEMENT";
-    public static final String PILET_PATH = "/pilets/**";
+    public static final String API_GETS = "/api/**";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         /**
          * Protect pilet publish endpoint
          */
-        http.requestMatchers().antMatchers(HttpMethod.POST, PILET_PATH);
+        //http.requestMatchers().antMatchers(HttpMethod.POST, PILET_PATH);
 
-        http.authorizeRequests().anyRequest().authenticated().and().httpBasic().and().csrf().disable();
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, API_GETS).permitAll()
+                .anyRequest().authenticated().and().httpBasic().and().csrf().disable();
     }
 
     @Override
