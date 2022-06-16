@@ -27,7 +27,7 @@ public class PiletService {
     private PiletRepository piletRepository;
 
     public Set<Pilet> getPilets(String appshell){
-        return piletRepository.findAllByAppshell(appshell)
+        return piletRepository.findAllByAppshellOrderByLastModifiedDateDescLastModifiedTimeDesc(appshell)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
