@@ -74,3 +74,7 @@ npx pilet publish --fresh --url http://localhost:9000/api/v1/pilets/appshell1 --
 Example: 
 const feedUrl = 'http://localhost:9000/api/v1/pilets/appshell1';
 ```
+
+## Swagger
+
+http://localhost:9000/swagger-ui/index.html
